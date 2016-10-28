@@ -20,9 +20,9 @@ Tool to make screenshots of urls and compare them using ImageMagick via IM4Java.
 * Add Selenium and Selenium-Screenshot as Maven dependency:
 ```
 <dependency>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>selenium-maven-plugin</artifactId>
-    <version>2.3</version>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-java</artifactId>
+    <version>3.0.1</version>
 </dependency>
 
 <dependency>
@@ -70,7 +70,7 @@ public class SampleMain
 
         sshot.compareImages("screenshot/folder","screenshot01","screenshot02.png");
 
-        webDriver.quit();
+        webDriver.close();
     }
 }
 ```

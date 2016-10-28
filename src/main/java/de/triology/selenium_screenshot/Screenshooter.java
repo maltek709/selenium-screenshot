@@ -17,6 +17,9 @@ import java.util.Date;
  */
 public class Screenshooter {
 
+    /*
+    * Getter and Setter
+     */
     public WebDriver getWebDriver() {
         return webDriver;
     }
@@ -45,6 +48,10 @@ public class Screenshooter {
         this.imageMagickPath = imageMagickPath;
     }
 
+    /*
+    * Create new name of file if file name already exists.
+    *
+     */
     private String createNewNameInFolder(String old, File folder){
         String newStr = "";
         File[] children = folder.listFiles();
@@ -68,7 +75,11 @@ public class Screenshooter {
         return old + childlen + ".png";
     }
 
-    private void makeScreenshot(File file){
+    /*
+    * Make the screenshot and create image file.
+    *
+     */
+    private void screenshot(File file){
         System.out.println("Screenshot: Creating screenshot: " + file.getName() + ".");
         Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000))
                 .takeScreenshot(webDriver);
@@ -79,6 +90,9 @@ public class Screenshooter {
         }
     }
 
+    /*
+    * Function controlling the proper generation of screenshots.
+     */
     public void makeScreenshot(String screenshotFolderName, String screenshotFileName) {
 
         if(!screenshotFileName.endsWith(".png")){
@@ -101,7 +115,7 @@ public class Screenshooter {
         }
 
         if (screenshotFolder.exists() && !screenshotFile.exists()) {
-            makeScreenshot(screenshotFile);
+            screenshot(screenshotFile);
         }
         else if (screenshotFile.exists())
         {
@@ -109,10 +123,14 @@ public class Screenshooter {
             screenshotFileName_diff = createNewNameInFolder(screenshotFileName_diff,screenshotFolder);
             System.out.println("Screenshot: File with name '" + screenshotFileName + "' allready exists.\n" +
                     "Rename to " + screenshotFileName_diff + ".");
-            makeScreenshot(new File(screenshotFolder, screenshotFileName_diff));
+            screenshot(new File(screenshotFolder, screenshotFileName_diff));
         }
     }
 
+    /*
+    * Function to compare two images.
+    *
+    */
     public void compareImages(String directory, String screenshot, String screenshotCompare){
 
         if(!screenshot.endsWith(".png")){
@@ -169,7 +187,15 @@ public class Screenshooter {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (IM4JavaException e) {
-                e.printStackTrace();
+                CommandException ce = (CommandException) e;
+                int ce_code = ce.getReturnCode();
+
+                if(ce_code == 2) {
+                    e.printStackTrace();
+                }
+                else if(ce_code == 1){
+                    System.out.println("Differences between images found.");
+                }
             }
         }
     }
