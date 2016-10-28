@@ -3,7 +3,9 @@ Tool to make screenshots of urls and compare them using ImageMagick via IM4Java.
 
 ## Prerequisites
 
-* Add repository to **pom.xml** of your project:
+* Clone repo and type ```mvn install``` to build ```.jar```. 
+* Put built ```.jar``` in your local Maven repository or...
+* Add repository to **pom.xml** of your project (only for corporation) :
 
 ```
 <repositories>
@@ -79,5 +81,5 @@ public class SampleMain
 
 ## Known Issues
 
-* IM4Java as used in the Screenshooter can't compare to Images with different Dimensions
+* IM4Java as used in the Screenshooter can't compare two images with different dimensions.
 * Pages with scrollbars will be stuck together view by view (see [AShot framework](https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot/1.5.2)).
