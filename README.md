@@ -79,5 +79,5 @@ public class SampleMain
 
 ## Known Issues
 
-* IM4Java as used in the Screenshooter can't compare to Images with different Dimensions
+* IM4Java as used in the Screenshooter can't compare two Images with different Dimensions
 * Pages with scrollbars will be stuck together view by view (see [AShot framework](https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot/1.5.2)).
