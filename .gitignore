@@ -1,3 +1,6 @@
 selenium-screenshot.iml
 .idea
 target
+pom.template.xml
+src/main/resources/
+src/test/
