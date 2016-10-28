@@ -89,6 +89,3 @@ public class SampleMain
 * Get rid of scrollbar of oversized full pages.
 * Find a way to compare images of different dimensions (maybe cut images using ImageMagicks [convert](http://www.imagemagick.org/script/convert.php) and compare parts of same size).
 * Future: Build Jenkins plugin to take screenshots automatically during build test phase and present images if there are differences between GUIs of another version. 
-=======
-* IM4Java as used in the Screenshooter can't compare two Images with different Dimensions
-* Pages with scrollbars will be stuck together view by view (see [AShot framework](https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot/1.5.2)).
