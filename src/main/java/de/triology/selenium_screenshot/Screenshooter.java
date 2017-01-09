@@ -1,6 +1,7 @@
 package de.triology.selenium_screenshot;
 
 import org.im4java.core.*;
+import org.im4java.process.ArrayListErrorConsumer;
 import org.im4java.process.ProcessStarter;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.ashot.AShot;
@@ -10,7 +11,7 @@ import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by malte on 28.10.16.
@@ -90,8 +91,13 @@ public class Screenshooter {
         }
     }
 
-    /*
-    * Function controlling the proper generation of screenshots.
+    /**
+     * Function controlling the proper generation of screenshots.
+     *
+     * <code>.png</code> extension is assumed if not specified.
+     *
+     * @param screenshotFolderName Folder to save a screenshot
+     * @param screenshotFileName filename for screenshot
      */
     public void makeScreenshot(String screenshotFolderName, String screenshotFileName) {
 
@@ -127,11 +133,14 @@ public class Screenshooter {
         }
     }
 
-    /*
-    * Function to compare two images.
-    *
-    */
-    public void compareImages(String directory, String screenshot, String screenshotCompare){
+    /**
+     * Function to compare two images.
+     *
+     * @return number of pixels that differ between images (<code>-1</code> if they are identical),
+     * or <code>-1</code> if comparison failed.
+     */
+    public int compareImages(String directory, String screenshot, String screenshotCompare){
+        int result = -1; // -1 is returned unless compare is called successfully
 
         if(!screenshot.endsWith(".png")){
             screenshot += ".png";
@@ -169,19 +178,44 @@ public class Screenshooter {
                 e.printStackTrace();
             }
 
-            CompareCmd com_cmd = new CompareCmd();
+            CompareCmd com_cmd = new CompareCmd() {
+                @Override
+                protected void finished(int code) throws Exception {
+                    if (code > 0) {
+                        if (getErrorText() != null) {
+                            super.finished(code);
+                        }
+                    } else {
+                        super.finished(code);
+                    }
+                }
+            };
             IMOperation op = new IMOperation();
 
+            op.addRawArgs("-metric", "AE");
             op.addImage(scShot.getAbsolutePath());
             op.addImage(scShotCompare.getAbsolutePath());
+
+            ArrayListErrorConsumer errorConsumer = new ArrayListErrorConsumer();
+            com_cmd.setErrorConsumer(errorConsumer);
 
             File comparisonOutput = new File(dir, "output.png");
             op.addImage(comparisonOutput.getAbsolutePath());
 
             try {
-
                 com_cmd.run(op);
 
+                List<String> errorOutput = errorConsumer.getOutput();
+                if (!errorOutput.isEmpty()) {
+                    String resultString = errorOutput.get(0);
+                    try {
+                        result = Integer.parseInt(resultString);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Comparison error: " + resultString);
+                    }
+                } else {
+                    result = 0;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -198,5 +232,6 @@ public class Screenshooter {
                 }
             }
         }
+        return result;
     }
 }

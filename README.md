@@ -68,7 +68,13 @@ public class SampleMain
 
         sshot.makeScreenshot("screenshot/folder","screenshot02");
 
-        sshot.compareImages("screenshot/folder","screenshot01","screenshot02.png");
+        int comparisonResult = sshot.compareImages("screenshot/folder","screenshot01","screenshot02.png");
+
+        if (comparisonResult == -1) {
+            System.out.println("Screenshots comparison failed");
+        } else if (comparisonResult > 0) {
+            System.out.println("Screenshots differ in " + comparisonResult + " pixels");
+        }
 
         webDriver.close();
     }
