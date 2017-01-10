@@ -146,7 +146,7 @@ public class Screenshooter {
             screenshot += ".png";
         }
         if(!screenshotCompare.endsWith(".png")){
-            screenshot += ".png";
+            screenshotCompare += ".png";
         }
 
         File dir = new File(directory);
